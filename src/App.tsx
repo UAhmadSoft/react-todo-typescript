@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC, SyntheticEvent, useState } from 'react';
 import './App.css';
 import { TodoInterface } from './interfaces/todos';
 import Todo from './Todo';
@@ -22,7 +22,8 @@ const App: FC = () => {
     }));
   };
 
-  const addTask = (): void => {
+  const addTask = (e: SyntheticEvent<HTMLFormElement>): void => {
+    e.preventDefault();
     setTodos((st) => [...st, { name: state.name, deadline: state.deadline }]);
     setState(initialState);
   };
@@ -33,25 +34,27 @@ const App: FC = () => {
 
   return (
     <div className='App'>
-      <div className='header'>
+      <form className='header' onSubmit={addTask}>
         <div className='inputContainer'>
           <input
             value={state.name}
             onChange={handleChange}
-            type='number'
+            type='text'
             name='name'
-            placeholder='Deadline (days)'
+            placeholder='Name'
+            required
           />
           <input
             value={state.deadline}
             onChange={handleChange}
-            type='text'
             name='deadline'
-            placeholder='Task Name'
+            type='number'
+            placeholder='Deadline'
+            required
           />
         </div>
-        <button onClick={addTask}>Add Task</button>
-      </div>
+        <button type='submit'>Add Task</button>
+      </form>
       <div className='todoList'>
         {todos.map((el: TodoInterface) => (
           <Todo
